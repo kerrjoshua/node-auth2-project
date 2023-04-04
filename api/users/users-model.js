@@ -38,8 +38,9 @@ async function findBy(filter) {
       }
     ]
    */
-  return db('users as u')
-    .select('u.*', 'r.role_name')
+  
+    return db('users as u')
+    .select('u.user_id', 'u.username', 'r.role_name')
     .join('roles as r', 'r.role_id', 'u.role_id')
     .where(filter)
 }
