@@ -53,7 +53,6 @@ const checkUsernameExists = async (req, res, next) => {
       next({ status: 422, message: 'Invalid Credentials' })
     } else {
       req.user = user
-      console.log(req.user)
       next()
     }
   } catch (err) {
