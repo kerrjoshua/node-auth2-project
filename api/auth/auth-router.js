@@ -53,7 +53,7 @@ router.post("/login", checkUsernameExists, (req, res, next) => {
    */
     function generateToken(user) {
       const payload = {
-        subject: user.id,
+        subject: user.user_id,
         username: user.username,
         role_name: user.role_name,
       };
@@ -65,25 +65,22 @@ router.post("/login", checkUsernameExists, (req, res, next) => {
       return jwt.sign(payload, JWT_SECRET, options);
     }
 
-  let { username, password } = req.body
+const username = req.user.username;
 
-  Users.findBy({ username })
-    .then(user => {
-      if (user && bcrypt.compareSync(password, user.password)) {
-        const token = generateToken(user);
+ 
+      if (bcrypt.compareSync(req.body.password, req.user.password)) {
+        const token = generateToken(req.user);
 
         res.json({
-          message: `${user.username} is back!`,
+          message: `${req.user.username} is back!`,
           token: token,
         });
       } else {
         res.status(401).json({ message: 'Invalid Credentials' });
       }
     })
-    .catch(err => {
-      res.status(500).json(err);
-    })
-})
+   
+
 ;
 
 module.exports = router;
